@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ChemMatch ⚡ Laboratorio de Enlaces</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="lab-bg" aria-hidden="true">
+    <div class="orb orb-1"></div>
+    <div class="orb orb-2"></div>
+    <div class="orb orb-3"></div>
+    <div class="grid-overlay"></div>
+  </div>
+
+  <canvas id="confetti-canvas"></canvas>
+
+  <main class="app-container">
+    <div class="top-bar">
+      <span class="brand-tag">⚗️ COLEGIO BOLÍVAR • CHEM-LAB</span>
+      <button id="sound-toggle" class="icon-btn" title="Activar/Silenciar sonido">🔊</button>
+    </div>
+
+    <!-- PANTALLA INICIO (HOME PAGE) -->
+    <section id="start-screen" class="card glass active">
+      <div class="hero-atom">
+        <div class="nucleus">⚛️</div>
+        <div class="orbit o1"><span></span></div>
+        <div class="orbit o2"><span></span></div>
+      </div>
+
+      <span class="badge">Química • High School</span>
+      <h1>Chem<span class="gradient-text">Match</span></h1>
+      <p class="subtitle">Estabiliza las moléculas clasificando su enlace químico antes de que el reactor sobrecargue.</p>
+
+      <div class="rules-grid">
+        <div class="rule-item">
+          <span class="rule-icon">⏱️</span>
+          <div>
+            <strong>15 Segundos</strong>
+            <small>Por cada reacción</small>
+          </div>
+        </div>
+        <div class="rule-item">
+          <span class="rule-icon">🛡️</span>
+          <div>
+            <strong>3 Escudos</strong>
+            <small>De contención</small>
+          </div>
+        </div>
+        <div class="rule-item">
+          <span class="rule-icon">🔥</span>
+          <div>
+            <strong>Combo x25</strong>
+            <small>Bono por racha</small>
+          </div>
+        </div>
+      </div>
+
+      <button id="start-btn" class="btn primary glow-btn">
+        <span>🚀 Iniciar Experimento</span>
+      </button>
+
+      <!-- Botón de Encuesta UX en la Home Page -->
+      <a href="https://docs.google.com/forms/d/e/1FAIpQLSeCVPoxkIGkMGrfrJIaIppx8jOwZ3DDLKONT5aD0qaSSZa0kw/viewform" target="_blank" rel="noopener noreferrer" class="btn survey" style="margin-top: 0.9rem;">
+        ⭐ Evaluar el Juego (Encuesta UX)
+      </a>
+    </section>
+
+    <!-- PANTALLA JUEGO -->
+    <section id="game-screen" class="card glass">
+      <header class="hud">
+        <div class="hud-pill" id="lives" title="Escudos restantes">🛡️🛡️🛡️</div>
+        <div class="hud-pill streak-pill" id="streak-badge">🔥 Racha: 0</div>
+        <div class="hud-pill score-pill" id="score">0 PTS</div>
+      </header>
+
+      <div class="progress-meta">
+        <span id="progress">Reacción 1 de 10</span>
+        <span id="timer-text">15.0s</span>
+      </div>
+      <div class="timer-bar">
+        <div id="timer-fill"></div>
+      </div>
+
+      <div class="reactor-stage" id="reactor-stage">
+        <div class="atom-visualizer" id="atom-visualizer">
+          <div class="atom-node left">
+            <span class="atom-sym" id="atom1-sym">Na</span>
+            <small id="atom1-en">EN: 0.93</small>
+          </div>
+
+          <div class="bond-bridge" id="bond-bridge">
+            <div class="electron e1"></div>
+            <div class="bond-line"></div>
+            <div class="electron e2"></div>
+          </div>
+
+          <div class="atom-node right">
+            <span class="atom-sym" id="atom2-sym">Cl</span>
+            <small id="atom2-en">EN: 3.16</small>
+          </div>
+        </div>
+
+        <h2 id="formula" class="formula-title">NaCl</h2>
+        <p id="elements-info" class="elements-desc">Sodio (Metal) + Cloro (No Metal) • ΔEN = 2.23</p>
+      </div>
+
+      <div class="options-grid">
+        <button class="btn option" data-type="Iónico">
+          <span class="key-hint">1</span>
+          <span class="opt-title">⚡ Enlace Iónico</span>
+          <small>Transferencia (ΔEN &gt; 1.7)</small>
+        </button>
+        <button class="btn option" data-type="Covalente Polar">
+          <span class="key-hint">2</span>
+          <span class="opt-title">🧲 Covalente Polar</span>
+          <small>Compartición desigual</small>
+        </button>
+        <button class="btn option" data-type="Covalente No Polar">
+          <span class="key-hint">3</span>
+          <span class="opt-title">⚖️ Covalente No Polar</span>
+          <small>Compartición equitativa</small>
+        </button>
+        <button class="btn option" data-type="Metálico">
+          <span class="key-hint">4</span>
+          <span class="opt-title">🔩 Enlace Metálico</span>
+          <small>Mar de electrones</small>
+        </button>
+      </div>
+
+      <div id="feedback-box" class="feedback hidden">
+        <p id="feedback-text"></p>
+        <button id="next-btn" class="btn secondary">Siguiente Reacción (Enter) →</button>
+      </div>
+    </section>
+
+    <!-- PANTALLA FINAL -->
+    <section id="end-screen" class="card glass">
+      <div class="trophy-anim" id="end-emoji">🏆</div>
+      <h2 id="end-title">¡Laboratorio Dominado!</h2>
+      
+      <div class="stats-summary">
+        <div class="stat-box">
+          <small>PUNTAJE FINAL</small>
+          <strong id="final-score-val">0</strong>
+        </div>
+        <div class="stat-box">
+          <small>PRECISIÓN</small>
+          <strong id="final-acc-val">0%</strong>
+        </div>
+        <div class="stat-box">
+          <small>MEJOR RACHA</small>
+          <strong id="final-streak-val">0</strong>
+        </div>
+      </div>
+
+      <p id="end-summary" class="subtitle">Has demostrado un control total sobre los enlaces químicos.</p>
+
+      <div class="ux-box">
+        <span class="ux-badge">VALIDACIÓN UX ESTUDIANTIL</span>
+        <p>¿Te pareció útil y divertido? Ayúdanos a mejorarlo en 30 segundos:</p>
+        <a id="survey-link" href="https://docs.google.com/forms/d/e/1FAIpQLSeCVPoxkIGkMGrfrJIaIppx8jOwZ3DDLKONT5aD0qaSSZa0kw/viewform" target="_blank" rel="noopener noreferrer" class="btn survey">
+          ⭐ Evaluar el Juego (Encuesta UX)
+        </a>
+      </div>
+
+      <button id="restart-btn" class="btn primary">🔄 Nuevo Experimento</button>
+    </section>
+  </main>
+
+  <script src="actions.js"></script>
+</body>
+</html>
